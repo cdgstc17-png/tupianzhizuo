@@ -1,0 +1,14 @@
+# Never commit a real local Streamlit secrets file.
+.env
+.streamlit/secrets.toml
+
+# Python cache and local virtual environments.
+__pycache__/
+*.pyc
+*.py[cod]
+.venv/
+venv/
+
+# Local editor and operating-system files.
+.DS_Store
+Thumbs.db
