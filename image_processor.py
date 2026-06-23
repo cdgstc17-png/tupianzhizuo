@@ -66,7 +66,10 @@ def _make_gpt_jpeg(image: Image.Image, max_edge: int = 1024) -> bytes:
     return output.getvalue()
 
 
-def process_uploaded_image(image_bytes: bytes) -> dict[str, bytes]:
+def process_uploaded_image(
+    image_bytes: bytes,
+    include_gpt_image: bool = False,
+) -> dict[str, bytes]:
     """
     Create all required image assets.
 
@@ -75,12 +78,14 @@ def process_uploaded_image(image_bytes: bytes) -> dict[str, bytes]:
     """
     image = _open_image(image_bytes)
 
-    return {
+    files = {
         "original.png": _save_png(image),
         "cloth_1x1.png": _save_png(_make_white_canvas(image, (1024, 1024))),
         "cloth_9x16.png": _save_png(_make_white_canvas(image, (1080, 1920))),
         "cloth_comfy_input.png": _save_png(
             _make_white_canvas(image, (832, 1216))
         ),
-        "compressed_for_gpt.jpg": _make_gpt_jpeg(image),
     }
+    if include_gpt_image:
+        files["compressed_for_gpt.jpg"] = _make_gpt_jpeg(image)
+    return files

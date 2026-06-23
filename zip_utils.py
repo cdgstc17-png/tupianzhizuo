@@ -4,11 +4,21 @@ from io import BytesIO
 from zipfile import ZIP_DEFLATED, ZipFile
 
 
-def build_readme(model: str) -> str:
+def build_readme(mode: str, model: str | None = None) -> str:
+    if mode == "api":
+        source_description = f"文字内容由 OpenAI API 自动分析生成，模型：{model}"
+        extra_image = """
+5. compressed_for_gpt.jpg
+   长边不超过 1024 像素的压缩图。本次 API 分析实际使用的图片。
+"""
+    else:
+        source_description = "文字内容由用户从 ChatGPT 手动复制粘贴，本网页未调用 OpenAI API"
+        extra_image = ""
+
     return f"""服装图片前期素材包使用说明
 ============================
 
-本素材包由网页自动生成，图片分析模型：{model}
+{source_description}
 本工具没有调用 ComfyUI，也没有生成视频。
 
 图片文件
@@ -25,13 +35,12 @@ def build_readme(model: str) -> str:
 4. cloth_comfy_input.png
    832x1216 白底参考图。可作为 ComfyUI 工作流中的图像输入。
 
-5. compressed_for_gpt.jpg
-   长边不超过 1024 像素的压缩图。本次 GPT 分析实际使用的图片。
+{extra_image}
 
 文字文件
 --------
 1. all_prompts.txt
-   GPT 一次分析返回的完整原始内容。
+   ChatGPT 输出的完整原始内容。
 
 2. clothing_analysis.txt
    服装品类、版型、颜色、面料、细节和视觉风格分析。
