@@ -68,13 +68,14 @@ def _make_gpt_jpeg(image: Image.Image, max_edge: int = 1024) -> bytes:
 
 def process_uploaded_image(
     image_bytes: bytes,
-    include_gpt_image: bool = False,
+    include_gpt_image: bool = True,
 ) -> dict[str, bytes]:
     """
     Create all required image assets.
 
     Every resized reference keeps the original aspect ratio and uses white
-    padding, so the garment is neither stretched nor cropped.
+    padding, so the garment is neither stretched nor cropped. Set
+    include_gpt_image=False in free manual mode to skip the GPT JPEG.
     """
     image = _open_image(image_bytes)
 
